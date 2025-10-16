@@ -2,11 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useState } from "react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const projects = [
     {
@@ -69,6 +71,7 @@ const Index = () => {
 
   const scrollToSection = (section: string) => {
     setActiveSection(section);
+    setMobileMenuOpen(false);
     const element = document.getElementById(section);
     element?.scrollIntoView({ behavior: "smooth" });
   };
@@ -95,7 +98,12 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <Button variant="outline" size="icon" className="md:hidden">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(true)}
+            >
               <Icon name="Menu" size={20} />
             </Button>
           </div>
@@ -314,6 +322,44 @@ const Index = () => {
           })()}
         </DialogContent>
       </Dialog>
+
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold">ARCHBUREAU</SheetTitle>
+          </SheetHeader>
+          <nav className="flex flex-col gap-4 mt-8">
+            {["home", "projects", "services", "contact"].map((section) => (
+              <button
+                key={section}
+                onClick={() => scrollToSection(section)}
+                className={`text-left text-lg py-3 px-4 rounded-lg transition-all ${
+                  activeSection === section 
+                    ? "bg-primary text-primary-foreground font-semibold" 
+                    : "text-foreground hover:bg-muted"
+                }`}
+              >
+                {section === "home" && "Главная"}
+                {section === "projects" && "Проекты"}
+                {section === "services" && "Услуги"}
+                {section === "contact" && "Контакты"}
+              </button>
+            ))}
+          </nav>
+          <div className="mt-auto pt-8 border-t border-border">
+            <div className="space-y-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Icon name="Mail" size={16} />
+                <span>info@archbureau.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Icon name="Phone" size={16} />
+                <span>+7 (495) 123-45-67</span>
+              </div>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
