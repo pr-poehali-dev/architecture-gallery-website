@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
   const projects = [
     {
@@ -12,21 +14,33 @@ const Index = () => {
       title: "Residential Complex",
       category: "Жилые комплексы",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/ecd1f0dc-6e51-4df3-b88c-30722dbb29f8.jpg",
-      description: "Современный жилой комплекс с панорамными окнами"
+      description: "Современный жилой комплекс с панорамными окнами",
+      fullDescription: "Многофункциональный жилой комплекс на 300 квартир с развитой инфраструктурой. Проект включает подземный паркинг, детские площадки, зоны отдыха и фитнес-центр. Фасады здания выполнены из высококачественных материалов с использованием панорамного остекления.",
+      area: "45,000 м²",
+      year: "2023",
+      location: "Москва, Россия"
     },
     {
       id: 2,
       title: "Luxury Villa",
       category: "Частные дома",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/0d332033-40f4-4470-8d5a-d686a0165df3.jpg",
-      description: "Роскошная вилла с геометрическим дизайном"
+      description: "Роскошная вилла с геометрическим дизайном",
+      fullDescription: "Эксклюзивная частная вилла с инновационным архитектурным решением. Проект сочетает минимализм и функциональность, создавая уникальное пространство для жизни. Большие окна обеспечивают естественное освещение и панорамный вид на ландшафт.",
+      area: "850 м²",
+      year: "2024",
+      location: "Подмосковье, Россия"
     },
     {
       id: 3,
       title: "Office Interior",
       category: "Коммерческие пространства",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/beeb9001-6b7a-4f90-97eb-819373e57f35.jpg",
-      description: "Минималистичный офисный интерьер"
+      description: "Минималистичный офисный интерьер",
+      fullDescription: "Современное офисное пространство для IT-компании. Открытая планировка с зонами для совместной работы, переговорными комнатами и зонами отдыха. Использованы натуральные материалы: мрамор, дерево и стекло.",
+      area: "2,500 м²",
+      year: "2023",
+      location: "Москва, Россия"
     }
   ];
 
@@ -117,6 +131,7 @@ const Index = () => {
                 key={project.id} 
                 className="overflow-hidden group cursor-pointer hover-scale border-0 shadow-lg"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => setSelectedProject(project.id)}
               >
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <img
@@ -132,7 +147,14 @@ const Index = () => {
                   </p>
                   <h4 className="text-2xl font-bold mb-2">{project.title}</h4>
                   <p className="text-muted-foreground">{project.description}</p>
-                  <Button variant="ghost" className="mt-4 p-0 h-auto story-link">
+                  <Button 
+                    variant="ghost" 
+                    className="mt-4 p-0 h-auto story-link"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedProject(project.id);
+                    }}
+                  >
                     Подробнее
                     <Icon name="ArrowRight" size={16} className="ml-2" />
                   </Button>
@@ -234,6 +256,64 @@ const Index = () => {
           <p className="text-muted-foreground">© 2024 ARCHBUREAU. Все права защищены.</p>
         </div>
       </footer>
+
+      <Dialog open={selectedProject !== null} onOpenChange={() => setSelectedProject(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedProject && (() => {
+            const project = projects.find(p => p.id === selectedProject);
+            if (!project) return null;
+            
+            return (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-3xl font-bold mb-2">{project.title}</DialogTitle>
+                  <p className="text-sm text-muted-foreground uppercase tracking-wider">{project.category}</p>
+                </DialogHeader>
+                
+                <div className="space-y-6 mt-4">
+                  <div className="relative aspect-video overflow-hidden rounded-lg">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-4 py-4 border-y border-border">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Площадь</p>
+                      <p className="font-semibold text-lg">{project.area}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Год</p>
+                      <p className="font-semibold text-lg">{project.year}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-1">Локация</p>
+                      <p className="font-semibold text-lg">{project.location}</p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-xl font-bold mb-3">О проекте</h4>
+                    <p className="text-muted-foreground leading-relaxed">{project.fullDescription}</p>
+                  </div>
+                  
+                  <div className="flex gap-4 pt-4">
+                    <Button className="flex-1" onClick={() => scrollToSection("contact")}>
+                      <Icon name="Mail" size={18} className="mr-2" />
+                      Обсудить проект
+                    </Button>
+                    <Button variant="outline" className="flex-1" onClick={() => setSelectedProject(null)}>
+                      Закрыть
+                    </Button>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
