@@ -291,7 +291,7 @@ const Index = () => {
 
       <footer className="py-8 px-6 border-t border-border">
         <div className="container mx-auto text-center">
-          <p className="text-muted-foreground">© 2024 ARCHBUREAU. Все права защищены.</p>
+          <p className="text-muted-foreground">© 2025 Mameshin Architect. Все права защищены.</p>
         </div>
       </footer>
 
