@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
+  const [selectedService, setSelectedService] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
@@ -58,24 +59,40 @@ const Index = () => {
 
   const services = [
     {
+      id: 1,
       icon: "Building2",
       title: "Архитектурное проектирование",
-      description: "Разработка концепций и полных архитектурных проектов"
+      description: "Разработка концепций и полных архитектурных проектов",
+      fullDescription: "Комплексное архитектурное проектирование жилых, коммерческих и общественных зданий. Мы создаём концепции, которые учитывают все аспекты: функциональность, эстетику, экологичность и экономическую эффективность.",
+      features: ["Эскизное проектирование", "Рабочая документация", "Авторский надзор", "3D визуализация"],
+      duration: "от 2 месяцев"
     },
     {
+      id: 2,
       icon: "Home",
       title: "Дизайн интерьеров",
-      description: "Создание уникальных интерьерных решений"
+      description: "Создание уникальных интерьерных решений",
+      fullDescription: "Разработка индивидуальных интерьерных решений для жилых и коммерческих помещений. Создаём пространства, которые отражают характер владельца и отвечают всем функциональным требованиям.",
+      features: ["Планировочные решения", "Подбор материалов", "Комплектация мебелью", "Дизайн-проект"],
+      duration: "от 1 месяца"
     },
     {
+      id: 3,
       icon: "Ruler",
       title: "Градостроительство",
-      description: "Проектирование городских пространств"
+      description: "Проектирование городских пространств",
+      fullDescription: "Разработка мастер-планов и концепций развития территорий. Создаём комфортную городскую среду с продуманной инфраструктурой, зонированием и транспортной доступностью.",
+      features: ["Мастер-планирование", "Благоустройство территории", "Концепции развития", "Анализ территории"],
+      duration: "от 3 месяцев"
     },
     {
+      id: 4,
       icon: "Lightbulb",
       title: "Консалтинг",
-      description: "Экспертные консультации по проектам"
+      description: "Экспертные консультации по проектам",
+      fullDescription: "Профессиональные консультации на всех этапах проектирования и строительства. Помогаем избежать ошибок, оптимизировать бюджет и найти лучшие архитектурные решения.",
+      features: ["Технический аудит", "Оптимизация проектов", "Экспертиза документации", "Сопровождение проекта"],
+      duration: "от 1 недели"
     }
   ];
 
@@ -166,15 +183,20 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
               <Card 
-                key={index} 
-                className="p-8 hover-scale border-2 transition-all duration-300 hover:border-primary"
+                key={service.id} 
+                className="p-8 hover-scale border-2 transition-all duration-300 hover:border-primary cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => setSelectedService(service.id)}
               >
                 <div className="mb-4">
                   <Icon name={service.icon} size={48} className="text-primary" />
                 </div>
                 <h4 className="font-bold mb-3 text-xl">{service.title}</h4>
                 <p className="text-muted-foreground text-lg">{service.description}</p>
+                <Button variant="ghost" className="mt-4 p-0 h-auto story-link">
+                  Подробнее
+                  <Icon name="ArrowRight" size={16} className="ml-2" />
+                </Button>
               </Card>
             ))}
           </div>
@@ -343,6 +365,67 @@ const Index = () => {
                       Обсудить проект
                     </Button>
                     <Button variant="outline" className="flex-1" onClick={() => setSelectedProject(null)}>
+                      Закрыть
+                    </Button>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={selectedService !== null} onOpenChange={() => setSelectedService(null)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          {selectedService && (() => {
+            const service = services.find(s => s.id === selectedService);
+            if (!service) return null;
+            
+            return (
+              <>
+                <DialogHeader>
+                  <div className="mb-4">
+                    <Icon name={service.icon} size={56} className="text-primary" />
+                  </div>
+                  <DialogTitle className="text-3xl font-bold mb-2">{service.title}</DialogTitle>
+                  <p className="text-lg text-muted-foreground">{service.description}</p>
+                </DialogHeader>
+                
+                <div className="space-y-6 mt-4">
+                  <div>
+                    <h4 className="text-xl font-bold mb-3">Описание услуги</h4>
+                    <p className="text-muted-foreground leading-relaxed">{service.fullDescription}</p>
+                  </div>
+                  
+                  <div className="border-t border-border pt-6">
+                    <h4 className="text-xl font-bold mb-4">Что входит в услугу</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {service.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <Icon name="CheckCircle2" size={20} className="text-primary flex-shrink-0" />
+                          <span className="text-muted-foreground">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Icon name="Clock" size={20} className="text-primary" />
+                      <span className="font-semibold">Сроки выполнения</span>
+                    </div>
+                    <p className="text-muted-foreground">{service.duration}</p>
+                  </div>
+                  
+                  <div className="flex gap-4 pt-4">
+                    <Button className="flex-1" onClick={() => {
+                      setSelectedService(null);
+                      scrollToSection("contact");
+                    }}>
+                      <Icon name="Mail" size={18} className="mr-2" />
+                      Заказать услугу
+                    </Button>
+                    <Button variant="outline" className="flex-1" onClick={() => setSelectedService(null)}>
                       Закрыть
                     </Button>
                   </div>
