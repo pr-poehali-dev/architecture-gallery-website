@@ -11,6 +11,7 @@ const Index = () => {
   const [selectedService, setSelectedService] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +28,10 @@ const Index = () => {
       title: "Residential Complex",
       category: "Жилые комплексы",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/ecd1f0dc-6e51-4df3-b88c-30722dbb29f8.jpg",
+      images: [
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/ecd1f0dc-6e51-4df3-b88c-30722dbb29f8.jpg",
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/4675d145-9ac0-4be7-a0f2-a4bfa57724f6.jpg"
+      ],
       description: "Современный жилой комплекс с панорамными окнами",
       fullDescription: "Многофункциональный жилой комплекс на 300 квартир с развитой инфраструктурой. Проект включает подземный паркинг, детские площадки, зоны отдыха и фитнес-центр. Фасады здания выполнены из высококачественных материалов с использованием панорамного остекления.",
       area: "45,000 м²",
@@ -38,6 +43,10 @@ const Index = () => {
       title: "Luxury Villa",
       category: "Частные дома",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/0d332033-40f4-4470-8d5a-d686a0165df3.jpg",
+      images: [
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/0d332033-40f4-4470-8d5a-d686a0165df3.jpg",
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/b3079e50-bbc9-4215-a14a-cd17334fc701.jpg"
+      ],
       description: "Роскошная вилла с геометрическим дизайном",
       fullDescription: "Эксклюзивная частная вилла с инновационным архитектурным решением. Проект сочетает минимализм и функциональность, создавая уникальное пространство для жизни. Большие окна обеспечивают естественное освещение и панорамный вид на ландшафт.",
       area: "850 м²",
@@ -49,6 +58,10 @@ const Index = () => {
       title: "Office Interior",
       category: "Коммерческие пространства",
       image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/beeb9001-6b7a-4f90-97eb-819373e57f35.jpg",
+      images: [
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/beeb9001-6b7a-4f90-97eb-819373e57f35.jpg",
+        "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/523955f3-d8af-470a-9c9e-e2f83daef5cb.jpg"
+      ],
       description: "Минималистичный офисный интерьер",
       fullDescription: "Современное офисное пространство для IT-компании. Открытая планировка с зонами для совместной работы, переговорными комнатами и зонами отдыха. Использованы натуральные материалы: мрамор, дерево и стекло.",
       area: "2,500 м²",
@@ -101,6 +114,19 @@ const Index = () => {
     setMobileMenuOpen(false);
     const element = document.getElementById(section);
     element?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleProjectOpen = (projectId: number) => {
+    setSelectedProject(projectId);
+    setCurrentImageIndex(0);
+  };
+
+  const nextImage = (project: any) => {
+    setCurrentImageIndex((prev) => (prev + 1) % project.images.length);
+  };
+
+  const prevImage = (project: any) => {
+    setCurrentImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
   };
 
   return (
@@ -216,7 +242,7 @@ const Index = () => {
                 key={project.id} 
                 className="overflow-hidden group cursor-pointer hover-scale border-0 shadow-lg"
                 style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => setSelectedProject(project.id)}
+                onClick={() => handleProjectOpen(project.id)}
               >
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <img
@@ -237,7 +263,7 @@ const Index = () => {
                     className="mt-4 p-0 h-auto story-link"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedProject(project.id);
+                      handleProjectOpen(project.id);
                     }}
                   >
                     Подробнее
@@ -331,12 +357,52 @@ const Index = () => {
                 </DialogHeader>
                 
                 <div className="space-y-6 mt-4">
-                  <div className="relative aspect-video overflow-hidden rounded-lg">
+                  <div className="relative aspect-video overflow-hidden rounded-lg group">
                     <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
+                      src={project.images[currentImageIndex]}
+                      alt={`${project.title} - изображение ${currentImageIndex + 1}`}
+                      className="w-full h-full object-cover transition-opacity duration-300"
                     />
+                    {project.images.length > 1 && (
+                      <>
+                        <Button
+                          variant="secondary"
+                          size="icon"
+                          className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            prevImage(project);
+                          }}
+                        >
+                          <Icon name="ChevronLeft" size={24} />
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="icon"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            nextImage(project);
+                          }}
+                        >
+                          <Icon name="ChevronRight" size={24} />
+                        </Button>
+                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                          {project.images.map((_: string, idx: number) => (
+                            <button
+                              key={idx}
+                              onClick={() => setCurrentImageIndex(idx)}
+                              className={`w-2 h-2 rounded-full transition-all ${
+                                idx === currentImageIndex 
+                                  ? 'bg-white w-6' 
+                                  : 'bg-white/50 hover:bg-white/75'
+                              }`}
+                              aria-label={`Перейти к изображению ${idx + 1}`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                   
                   <div className="grid grid-cols-3 gap-4 py-4 border-y border-border">
