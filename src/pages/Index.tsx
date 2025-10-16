@@ -128,9 +128,12 @@ const Index = () => {
             opacity: Math.max(1 - scrollY / 500, 0)
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+          <img 
+            src="https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/18bf96fd-0e13-4f12-813b-a1e48243b603.jpg"
+            alt="Architecture background"
+            className="absolute inset-0 w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/90 to-background" />
         </div>
         <div className="container mx-auto max-w-6xl">
           <div 
