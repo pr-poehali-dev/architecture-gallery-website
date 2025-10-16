@@ -93,7 +93,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold tracking-tight">Архитектурное бюро Мамешина</h1>
             <div className="hidden md:flex gap-8">
-              {["home", "projects", "services", "contact"].map((section) => (
+              {["home", "services", "projects", "contact"].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
@@ -102,8 +102,8 @@ const Index = () => {
                   }`}
                 >
                   {section === "home" && "Главная"}
-                  {section === "projects" && "Проекты"}
                   {section === "services" && "Услуги"}
+                  {section === "projects" && "Проекты"}
                   {section === "contact" && "Контакты"}
                 </button>
               ))}
@@ -149,9 +149,34 @@ const Index = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
               Архитектурное бюро полного цикла. Проектируем жилые комплексы, частные дома и коммерческие объекты.
             </p>
-            <Button size="lg" onClick={() => scrollToSection("projects")} className="hover-scale">
-              Смотреть проекты
+            <Button size="lg" onClick={() => scrollToSection("services")} className="hover-scale">
+              Наши услуги
             </Button>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <h3 className="text-5xl font-bold mb-4">Услуги</h3>
+            <p className="text-lg text-muted-foreground">Полный спектр архитектурных услуг</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((service, index) => (
+              <Card 
+                key={index} 
+                className="p-8 hover-scale border-2 transition-all duration-300 hover:border-primary"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="mb-4">
+                  <Icon name={service.icon} size={48} className="text-primary" />
+                </div>
+                <h4 className="font-bold mb-3 text-xl">{service.title}</h4>
+                <p className="text-muted-foreground text-lg">{service.description}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -197,31 +222,6 @@ const Index = () => {
                     <Icon name="ArrowRight" size={16} className="ml-2" />
                   </Button>
                 </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="services" className="py-20 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
-            <h3 className="text-5xl font-bold mb-4">Услуги</h3>
-            <p className="text-lg text-muted-foreground">Полный спектр архитектурных услуг</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {services.map((service, index) => (
-              <Card 
-                key={index} 
-                className="p-8 hover-scale border-2 transition-all duration-300 hover:border-primary"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="mb-4">
-                  <Icon name={service.icon} size={48} className="text-primary" />
-                </div>
-                <h4 className="font-bold mb-3 text-xl">{service.title}</h4>
-                <p className="text-muted-foreground text-lg">{service.description}</p>
               </Card>
             ))}
           </div>
@@ -359,7 +359,7 @@ const Index = () => {
             <SheetTitle className="text-2xl font-bold">ARCHBUREAU</SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col gap-4 mt-8">
-            {["home", "projects", "services", "contact"].map((section) => (
+            {["home", "services", "projects", "contact"].map((section) => (
               <button
                 key={section}
                 onClick={() => scrollToSection(section)}
@@ -370,8 +370,8 @@ const Index = () => {
                 }`}
               >
                 {section === "home" && "Главная"}
-                {section === "projects" && "Проекты"}
                 {section === "services" && "Услуги"}
+                {section === "projects" && "Проекты"}
                 {section === "contact" && "Контакты"}
               </button>
             ))}
