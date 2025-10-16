@@ -1,12 +1,239 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import Icon from "@/components/ui/icon";
+import { useState } from "react";
 
 const Index = () => {
+  const [activeSection, setActiveSection] = useState("home");
+
+  const projects = [
+    {
+      id: 1,
+      title: "Residential Complex",
+      category: "Жилые комплексы",
+      image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/ecd1f0dc-6e51-4df3-b88c-30722dbb29f8.jpg",
+      description: "Современный жилой комплекс с панорамными окнами"
+    },
+    {
+      id: 2,
+      title: "Luxury Villa",
+      category: "Частные дома",
+      image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/0d332033-40f4-4470-8d5a-d686a0165df3.jpg",
+      description: "Роскошная вилла с геометрическим дизайном"
+    },
+    {
+      id: 3,
+      title: "Office Interior",
+      category: "Коммерческие пространства",
+      image: "https://cdn.poehali.dev/projects/82ef5eed-d0d0-45d9-af58-07a3f9bfc741/files/beeb9001-6b7a-4f90-97eb-819373e57f35.jpg",
+      description: "Минималистичный офисный интерьер"
+    }
+  ];
+
+  const services = [
+    {
+      icon: "Building2",
+      title: "Архитектурное проектирование",
+      description: "Разработка концепций и полных архитектурных проектов"
+    },
+    {
+      icon: "Home",
+      title: "Дизайн интерьеров",
+      description: "Создание уникальных интерьерных решений"
+    },
+    {
+      icon: "Ruler",
+      title: "Градостроительство",
+      description: "Проектирование городских пространств"
+    },
+    {
+      icon: "Lightbulb",
+      title: "Консалтинг",
+      description: "Экспертные консультации по проектам"
+    }
+  ];
+
+  const scrollToSection = (section: string) => {
+    setActiveSection(section);
+    const element = document.getElementById(section);
+    element?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold tracking-tight">ARCHBUREAU</h1>
+            <div className="hidden md:flex gap-8">
+              {["home", "projects", "services", "contact"].map((section) => (
+                <button
+                  key={section}
+                  onClick={() => scrollToSection(section)}
+                  className={`text-sm uppercase tracking-wider transition-colors hover:text-primary ${
+                    activeSection === section ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {section === "home" && "Главная"}
+                  {section === "projects" && "Проекты"}
+                  {section === "services" && "Услуги"}
+                  {section === "contact" && "Контакты"}
+                </button>
+              ))}
+            </div>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <Icon name="Menu" size={20} />
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      <section id="home" className="pt-32 pb-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
+              Создаём пространства<br />будущего
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+              Архитектурное бюро полного цикла. Проектируем жилые комплексы, частные дома и коммерческие объекты.
+            </p>
+            <Button size="lg" onClick={() => scrollToSection("projects")} className="hover-scale">
+              Смотреть проекты
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="py-20 px-6 bg-muted/30">
+        <div className="container mx-auto max-w-7xl">
+          <div className="mb-12">
+            <h3 className="text-5xl font-bold mb-4">Проекты</h3>
+            <p className="text-lg text-muted-foreground">Избранные работы нашего бюро</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, index) => (
+              <Card 
+                key={project.id} 
+                className="overflow-hidden group cursor-pointer hover-scale border-0 shadow-lg"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="relative overflow-hidden aspect-[4/3]">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+                <CardContent className="p-6">
+                  <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
+                    {project.category}
+                  </p>
+                  <h4 className="text-2xl font-bold mb-2">{project.title}</h4>
+                  <p className="text-muted-foreground">{project.description}</p>
+                  <Button variant="ghost" className="mt-4 p-0 h-auto story-link">
+                    Подробнее
+                    <Icon name="ArrowRight" size={16} className="ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="services" className="py-20 px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="mb-12 text-center">
+            <h3 className="text-5xl font-bold mb-4">Услуги</h3>
+            <p className="text-lg text-muted-foreground">Полный спектр архитектурных услуг</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {services.map((service, index) => (
+              <Card 
+                key={index} 
+                className="p-8 hover-scale border-2 transition-all duration-300 hover:border-primary"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="mb-4">
+                  <Icon name={service.icon} size={48} className="text-primary" />
+                </div>
+                <h4 className="text-2xl font-bold mb-3">{service.title}</h4>
+                <p className="text-muted-foreground text-lg">{service.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="py-20 px-6 bg-primary text-primary-foreground">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h3 className="text-5xl font-bold mb-4">Контакты</h3>
+            <p className="text-lg opacity-90">Свяжитесь с нами для обсуждения вашего проекта</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <Icon name="Mail" size={32} className="mx-auto mb-3 opacity-90" />
+              <p className="font-medium mb-1">Email</p>
+              <p className="opacity-80">info@archbureau.com</p>
+            </div>
+            <div className="text-center">
+              <Icon name="Phone" size={32} className="mx-auto mb-3 opacity-90" />
+              <p className="font-medium mb-1">Телефон</p>
+              <p className="opacity-80">+7 (495) 123-45-67</p>
+            </div>
+            <div className="text-center">
+              <Icon name="MapPin" size={32} className="mx-auto mb-3 opacity-90" />
+              <p className="font-medium mb-1">Адрес</p>
+              <p className="opacity-80">Москва, ул. Примерная, 1</p>
+            </div>
+          </div>
+
+          <Card className="p-8">
+            <form className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-foreground">Имя</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 border border-input rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Ваше имя"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2 text-foreground">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-3 border border-input rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="your@email.com"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2 text-foreground">Сообщение</label>
+                <textarea
+                  rows={5}
+                  className="w-full px-4 py-3 border border-input rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Расскажите о вашем проекте..."
+                />
+              </div>
+              <Button size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                Отправить заявку
+              </Button>
+            </form>
+          </Card>
+        </div>
+      </section>
+
+      <footer className="py-8 px-6 border-t border-border">
+        <div className="container mx-auto text-center">
+          <p className="text-muted-foreground">© 2024 ARCHBUREAU. Все права защищены.</p>
+        </div>
+      </footer>
     </div>
   );
 };
