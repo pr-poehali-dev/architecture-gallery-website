@@ -3,12 +3,22 @@ import { Card, CardContent } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const projects = [
     {
@@ -110,9 +120,26 @@ const Index = () => {
         </div>
       </nav>
 
-      <section id="home" className="pt-32 pb-20 px-6">
+      <section id="home" className="relative pt-32 pb-20 px-6 min-h-screen flex items-center overflow-hidden">
+        <div 
+          className="absolute inset-0 -z-10"
+          style={{
+            transform: `translateY(${scrollY * 0.5}px)`,
+            opacity: Math.max(1 - scrollY / 500, 0)
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        </div>
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16 animate-fade-in">
+          <div 
+            className="text-center mb-16 animate-fade-in"
+            style={{
+              transform: `translateY(${scrollY * 0.2}px)`,
+              opacity: Math.max(1 - scrollY / 400, 0)
+            }}
+          >
             <h2 className="text-6xl md:text-8xl font-bold mb-6 tracking-tight">
               Создаём пространства<br />будущего
             </h2>
