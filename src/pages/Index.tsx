@@ -220,7 +220,7 @@ const Index = () => {
                 <div className="mb-4">
                   <Icon name={service.icon} size={48} className="text-primary" />
                 </div>
-                <h4 className="text-2xl font-bold mb-3">{service.title}</h4>
+                <h4 className="font-bold mb-3 text-xl">{service.title}</h4>
                 <p className="text-muted-foreground text-lg">{service.description}</p>
               </Card>
             ))}
@@ -239,7 +239,7 @@ const Index = () => {
             <div className="text-center">
               <Icon name="Mail" size={32} className="mx-auto mb-3 opacity-90" />
               <p className="font-medium mb-1">Email</p>
-              <p className="opacity-80">info@archbureau.com</p>
+              <p className="opacity-80">mameshin@mail.ru</p>
             </div>
             <div className="text-center">
               <Icon name="Phone" size={32} className="mx-auto mb-3 opacity-90" />
